@@ -147,9 +147,9 @@ checksum = "b3ec9c7fb9a2ce708751c98e31ccbae74b6ab194f5c8e30cfb7ed62e38b70866"
 
 [[package]]
 name = "elasticsearch"
-version = "7.7.1-alpha.1"
+version = "7.8.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "784225c9e158d39f75a69918f68bd09e93c0d06f011eb85b2517721c34218e31"
+checksum = "ceb9ea158263eb216a652ec7901d72aee8a60d412106e6600990223f40c79837"
 dependencies = [
  "base64 0.11.0",
  "bytes",
