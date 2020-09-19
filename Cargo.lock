@@ -147,9 +147,9 @@ checksum = "4c53dc3a653e0f64081026e4bf048d48fec9fce90c66e8326ca7292df0ff2d82"
 
 [[package]]
 name = "elasticsearch"
-version = "7.8.1-alpha.1"
+version = "7.9.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba78060eb5bc4a763b7439a570838d069aeecd7f4b45f991391d05d05d360310"
+checksum = "f4155966ab01c700ce177e8c9e4d8fcd2a8ec185b2021f436c6a6537ba160890"
 dependencies = [
  "base64 0.11.0",
  "bytes",
@@ -161,6 +161,7 @@ dependencies = [
  "serde_json",
  "serde_with",
  "url",
+ "void",
 ]
 
 [[package]]
@@ -1244,6 +1245,12 @@ name = "version_check"
 version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5a972e5669d67ba988ce3dc826706fb0a8b01471c088cb0b6110b805cc36aed"
+
+[[package]]
+name = "void"
+version = "1.0.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a02e4885ed3bc0f2de90ea6dd45ebcbb66dacffe03547fadbb0eeae2770887d"
 
 [[package]]
 name = "want"
