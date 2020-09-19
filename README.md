@@ -12,10 +12,11 @@ This uses the Official Elasticsearch Rust Client
 
 # Usage
 
-`eq` queries Elasticsearch for results and uses the [Search
-After](https://www.elastic.co/guide/en/elasticsearch/reference/7.6/search-request-body.html#request-body-search-search-after)
-API for retrieving multiple batches of results. This can be useful for
-interacting with documents like logs in a terminal.
+`eq` queries Elasticsearch for results and uses the [Search After][] API for
+retrieving multiple batches of results. This can be useful for interacting with
+documents like logs in a terminal.
+
+[Search After]: https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after
 
 ```
 eq 0.4.0
@@ -84,7 +85,7 @@ $ eq --query 'agent.hostname: my-server'
 ```
 
 `--query-dsl` allows [Elasticsearch Query
-DSL](https://www.elastic.co/guide/en/elasticsearch/reference/7.6/query-dsl.html)
+DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
 to be used.
 
 ```console
@@ -102,7 +103,33 @@ $ eq --query-dsl '
 
 # Installation
 
+
+## Binaries
+
 [Precompiled binaries are available as github releases](https://github.com/Conky5/eq/releases).
+
+### macOS Gatekeeper
+
+The `eq` executable for macOS is not codesigned. If you download the
+precompiled binary with a web browser an extended file attribute will be set on
+the file that will cause a pop-up to appear when you try and run `eq`. To
+prevent this I recommend removing all the extended attributes from the
+`.tar.gz` after it has been downloaded to avoid Gatekeeper's interference:
+
+```sh
+xattr -c ~/Downloads/eq-v*.tar.gz
+```
+
+## Package managers
+
+Homebrew/linuxbrew can be used with my [homebrew-tap](https://github.com/Conky5/homebrew-tap).
+
+```sh
+brew tap conky5/tap
+brew install eq
+```
+
+## Cargo
 
 If you have the rust tool chain installed, `eq` can be installed with
 `cargo`:
