@@ -1,6 +1,6 @@
 [package]
 name = "eq"
-version = "0.4.0"
+version = "0.4.1"
 authors = ["Chris Koehnke <chris@koehnke.xyz>"]
 description = "A simple command line interface for Elasticsearch queries."
 edition = "2018"
@@ -18,5 +18,8 @@ maintenance = { status = "experimental" }
 # a few tweaks for reducing the binary size from
 # https://github.com/johnthagen/min-sized-rust
 [profile.release]
-lto = true
+# https://blog.rust-lang.org/inside-rust/2020/06/29/lto-improvements.html
+# https://blog.llvm.org/posts/2016-06-21-thinlto-scalable-and-incremental-lto/
+lto = 'thin'
 codegen-units = 1
+panic = 'abort'
