@@ -405,116 +405,121 @@ fn add_to_serde_value<S: Into<String>>(
     map.insert(key_to_add.into(), value_to_add);
 }
 
-#[test]
-fn add_to_existing_json_test() {
-    let mut json: Value = json!({"a": 1});
-    add_to_serde_value(&mut json, "b", json!(2));
-    assert_eq!(json, json!({"a": 1, "b": 2}));
-}
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-#[tokio::test]
-#[ignore]
-async fn elasticsearch_pagination_test() {
-    use elasticsearch::{
-        indices::IndicesCreateParts, indices::IndicesDeleteParts, params::Refresh, IndexParts,
-    };
+    #[test]
+    fn add_to_existing_json_test() {
+        let mut json: Value = json!({"a": 1});
+        add_to_serde_value(&mut json, "b", json!(2));
+        assert_eq!(json, json!({"a": 1, "b": 2}));
+    }
 
-    let client = Elasticsearch::default();
-    let test_index = "eq-testing";
-    let test_record_count = 3;
+    #[tokio::test]
+    #[ignore]
+    async fn elasticsearch_pagination_test() {
+        use elasticsearch::{
+            indices::IndicesCreateParts, indices::IndicesDeleteParts, params::Refresh, IndexParts,
+        };
 
-    // delete the testing index in case it already exists
-    client
-        .indices()
-        .delete(IndicesDeleteParts::Index(&[test_index]))
-        .send()
-        .await
-        .expect("Could not delete testing index.");
+        let client = Elasticsearch::default();
+        let test_index = "eq-testing";
+        let test_record_count = 3;
 
-    // create the testing index
-    let index_creation_result = client
-        .indices()
-        .create(IndicesCreateParts::Index(test_index))
-        .send()
-        .await;
+        // delete the testing index in case it already exists
+        client
+            .indices()
+            .delete(IndicesDeleteParts::Index(&[test_index]))
+            .send()
+            .await
+            .expect("Could not delete testing index.");
 
-    // verify we got a successful response
-    verify_response(index_creation_result).await;
-
-    // create some testing records
-    for i in 0..test_record_count {
-        let index_result = client
-            .index(IndexParts::Index(test_index))
-            .body(json!({
-                "@timestamp": format!("2020-03-1{}T18:11:38.988Z", i),
-                "message": format!("log entry {}", i),
-                "host": "a",
-            }))
+        // create the testing index
+        let index_creation_result = client
+            .indices()
+            .create(IndicesCreateParts::Index(test_index))
             .send()
             .await;
 
-        verify_response(index_result).await;
-    }
-    // add one more record that should not be hit by the searches
-    verify_response(
-        client
-            .index(IndexParts::Index(test_index))
-            .body(json!({
-                "@timestamp": format!("2020-03-1{}T18:11:38.988Z", test_record_count),
-                "message": format!("log entry {}", test_record_count),
-                "host": "b"
-            }))
-            // trigger a refresh on the latest record so we can immediately
-            // query for the tests
-            .refresh(Refresh::True)
-            .send()
-            .await,
-    )
-    .await;
+        // verify we got a successful response
+        verify_response(index_creation_result).await;
 
-    let query_string_options = QueryOptions {
-        index: test_index.to_string(),
-        size: 1,
-        query_string: "host: a".to_string(),
-        body: json!({}),
-        sort: "@timestamp:asc,_id:asc".to_string(),
-        print_json: false,
-        verbose: true,
-        follow: false,
-        limit: 10,
-    };
+        // create some testing records
+        for i in 0..test_record_count {
+            let index_result = client
+                .index(IndexParts::Index(test_index))
+                .body(json!({
+                    "@timestamp": format!("2020-03-1{}T18:11:38.988Z", i),
+                    "message": format!("log entry {}", i),
+                    "host": "a",
+                }))
+                .send()
+                .await;
 
-    // query our test index and see that we saw the full count of records, even with the restricted
-    // batch size
-    assert_eq!(
-        logs(&client, query_string_options.clone()).await.unwrap(),
-        test_record_count
-    );
+            verify_response(index_result).await;
+        }
+        // add one more record that should not be hit by the searches
+        verify_response(
+            client
+                .index(IndexParts::Index(test_index))
+                .body(json!({
+                    "@timestamp": format!("2020-03-1{}T18:11:38.988Z", test_record_count),
+                    "message": format!("log entry {}", test_record_count),
+                    "host": "b"
+                }))
+                // trigger a refresh on the latest record so we can immediately
+                // query for the tests
+                .refresh(Refresh::True)
+                .send()
+                .await,
+        )
+        .await;
 
-    let mut query_dsl_options = query_string_options.clone();
+        let query_string_options = QueryOptions {
+            index: test_index.to_string(),
+            size: 1,
+            query_string: "host: a".to_string(),
+            body: json!({}),
+            sort: "@timestamp:asc,_id:asc".to_string(),
+            print_json: false,
+            verbose: true,
+            follow: false,
+            limit: 10,
+        };
 
-    // change our search to use the query dsl
-    query_dsl_options.body = json!({
-        "query": {
-            "term": {
-                "host" : {
-                    "value": "a"
+        // query our test index and see that we saw the full count of records, even with the restricted
+        // batch size
+        assert_eq!(
+            logs(&client, query_string_options.clone()).await.unwrap(),
+            test_record_count
+        );
+
+        let mut query_dsl_options = query_string_options.clone();
+
+        // change our search to use the query dsl
+        query_dsl_options.body = json!({
+            "query": {
+                "term": {
+                    "host" : {
+                        "value": "a"
+                    }
                 }
             }
-        }
-    });
+        });
 
-    // verify the right number of search results from the query dsl
-    assert_eq!(
-        logs(&client, query_dsl_options).await.unwrap(),
-        test_record_count
-    );
+        // verify the right number of search results from the query dsl
+        assert_eq!(
+            logs(&client, query_dsl_options).await.unwrap(),
+            test_record_count
+        );
 
-    let mut no_limit_query_options = query_string_options.clone();
-    no_limit_query_options.limit = 0;
+        let mut no_limit_query_options = query_string_options.clone();
+        no_limit_query_options.limit = 0;
 
-    assert_eq!(
-        logs(&client, no_limit_query_options).await.unwrap(),
-        test_record_count
-    );
+        assert_eq!(
+            logs(&client, no_limit_query_options).await.unwrap(),
+            test_record_count
+        );
+    }
 }
