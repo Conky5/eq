@@ -3,9 +3,6 @@
 A simple command line interface to perform queries on
 [Elasticsearch](https://github.com/elastic/elasticsearch).
 
-This project is under development, no guarantees of version compatibility or
-breaking changes at this point.
-
 This uses the Official Elasticsearch Rust Client
 [elasticsearch-rs](https://github.com/elastic/elasticsearch-rs), which is in an
 *alpha* state.
@@ -19,7 +16,7 @@ documents like logs in a terminal.
 [Search After]: https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after
 
 ```
-eq 0.4.1
+eq 1.0.0
 A simple command line interface for Elasticsearch queries.
 
 USAGE:
