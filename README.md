@@ -126,6 +126,18 @@ brew tap conky5/tap
 brew install eq
 ```
 
+## From source
+
+From this repository run this:
+
+```sh
+make
+sudo make install
+```
+
+[scdoc](https://git.sr.ht/~sircmpwn/scdoc) is an optional dependency, if
+installed a `man` page will be generated and installed.
+
 ## Cargo
 
 If you have the rust tool chain installed, `eq` can be installed with
