@@ -13,14 +13,11 @@ eq - query Elasticsearch
 *eq* is a simple command line interface for Elasticsearch queries.
 
 *eq*'s defaults are set up for querying log messages ingested into
-Elasticsearch from filebeat: the default index pattern is _filebeat-\*_, only
-_.source.message_ fields are printed, and results are sorted by _@timestamp_.
-The default query is the query string _\*_ which will return all the results,
-you'll likely want to limit this to a subset of results using _--query_, for
-example 'agent.hostname: server-a' to limit results to only results that match
-that field. This is similiar to using *cat* or *tail* on a log file from disk,
-which can then be redirected to a file, or piped into *grep* for further shell
-processing.
+Elasticsearch from Filebeat. The default index pattern is "filebeat-\*", only
+"\_source.message" fields are printed, and results are sorted by "\@timestamp".
+The default query is the query string "\*" which will return all results,
+you'll likely want to limit this using _--query_, for example "--query
+'agent.hostname: my-host'".
 
 To query other types of documents use the _--index_, _--json_, and _--sort_
 options.
