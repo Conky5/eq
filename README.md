@@ -16,7 +16,7 @@ documents like logs in a terminal.
 [Search After]: https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after
 
 ```
-eq 1.0.0
+eq 1.0.1
 A simple command line interface for Elasticsearch queries.
 
 USAGE:
