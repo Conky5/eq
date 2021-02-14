@@ -15,9 +15,14 @@ eq - query Elasticsearch
 *eq*'s defaults are set up for querying log messages ingested into
 Elasticsearch from Filebeat. The default index pattern is "filebeat-\*", only
 "\_source.message" fields are printed, and results are sorted by "\@timestamp".
-The default query is the query string "\*" which will return all results,
-you'll likely want to limit this using _--query_, for example "--query
-'agent.hostname: my-host'".
+The default query is the query string "\*" which will return all results.
+
+You'll very likely at least want to limit the query using _--query_, for
+example:
+
+```
+eq --query 'agent.hostname: my-host'
+```
 
 To query other types of documents use the _--index_, _--json_, and _--sort_
 options.
