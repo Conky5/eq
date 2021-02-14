@@ -128,11 +128,16 @@ brew install eq
 
 ## From source
 
-From this repository run this:
+From this repository run:
 
 ```sh
 make
-sudo make install
+```
+
+Then with root privileges run:
+
+```sh
+make install
 ```
 
 [scdoc](https://git.sr.ht/~sircmpwn/scdoc) is an optional dependency, if
