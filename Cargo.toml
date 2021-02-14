@@ -1,6 +1,6 @@
 [package]
 name = "eq"
-version = "1.0.1"
+version = "1.0.2"
 authors = ["Chris Koehnke <chris@koehnke.xyz>"]
 description = "A simple command line interface for Elasticsearch queries."
 edition = "2018"
