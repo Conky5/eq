@@ -198,7 +198,7 @@ dependencies = [
 
 [[package]]
 name = "eq"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "elasticsearch",
  "serde_json",
