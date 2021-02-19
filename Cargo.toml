@@ -12,9 +12,6 @@ structopt = "0.3"
 tokio = { version = "*", features = ["full"] }
 url = "2.2"
 
-[badges]
-maintenance = { status = "experimental" }
-
 # a few tweaks for reducing the binary size from
 # https://github.com/johnthagen/min-sized-rust
 [profile.release]
