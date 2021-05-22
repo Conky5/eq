@@ -185,13 +185,19 @@ async fn main() {
 
     let connection_pool = SingleNodeConnectionPool::new(server);
     let mut transport_builder = TransportBuilder::new(connection_pool);
+
     match opt.username {
         None => (),
         Some(username) => {
-            transport_builder =
-                transport_builder.auth(Credentials::Basic(username, opt.password.unwrap()));
+            transport_builder = if let Some(p) = opt.password {
+                transport_builder.auth(Credentials::Basic(username, p))
+            } else {
+                eprintln!("eq: Username and password must be set at the same time.");
+                exit(1)
+            }
         }
     }
+
     if opt.no_certificate_validation {
         transport_builder = transport_builder.cert_validation(CertificateValidation::None);
     }
